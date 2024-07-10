@@ -1,6 +1,6 @@
-package com.espe.msvc.usuarios.models.entity.services;
+package com.espe.msvc.usuarios.services;
 import com.espe.msvc.usuarios.models.entity.Usuario;
-import com.espe.msvc.usuarios.models.entity.repositories.UsuarioRepository;
+import com.espe.msvc.usuarios.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.espe.msvc.usuarios.models.entity.services;
+package com.espe.msvc.usuarios.services;
 
 import com.espe.msvc.usuarios.models.entity.Usuario;
 

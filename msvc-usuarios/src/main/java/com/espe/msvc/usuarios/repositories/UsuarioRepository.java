@@ -1,4 +1,4 @@
-package com.espe.msvc.usuarios.models.entity.repositories;
+package com.espe.msvc.usuarios.repositories;
 
 import com.espe.msvc.usuarios.models.entity.Usuario;
 import org.springframework.data.repository.CrudRepository;
