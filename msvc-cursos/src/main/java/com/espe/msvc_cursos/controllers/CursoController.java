@@ -1,7 +1,9 @@
 package com.espe.msvc_cursos.controllers;
 
+import com.espe.msvc_cursos.models.Usuario;
 import com.espe.msvc_cursos.models.entity.Curso;
 import com.espe.msvc_cursos.services.CursoService;
+import feign.FeignException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,10 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("api/cursos")
@@ -71,6 +70,21 @@ public class CursoController {
         if(optionalCursos.isPresent()) {
             service.eliminar(id);
             return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/asignar-usuario/{idcurso}")
+    public ResponseEntity<?> asignarUsuario(@RequestBody Usuario usuario, @PathVariable Long idcurso){
+        Optional<Usuario> o;
+        try {
+            o = service.agregarUsuario(usuario, idcurso);
+        } catch (FeignException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).
+                    body(Collections.singletonMap("mensaje", "Error:" + e.getMessage()));
+        }
+        if (o.isPresent()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(o.get());
         }
         return ResponseEntity.notFound().build();
     }
