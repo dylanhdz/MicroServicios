@@ -38,6 +38,7 @@ button {
 }
 .eliminar {
   background-color: firebrick; /* Red color for delete button */
+  margin: 10px;
 }
 
 button:hover, button:focus {

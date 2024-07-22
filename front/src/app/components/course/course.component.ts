@@ -53,6 +53,22 @@ export class CourseComponent implements OnInit {
     });
   }
 
+  deleteCourse(course: Course): void {
+    if (course.id !== undefined) {
+      this.courseService.deleteCourse(course.id).subscribe({
+        next: (response) => {
+          alert("Se ha eliminado el curso '" + course.nombre + "'");
+          this.loadCourses();
+        },
+        error: (error) => {
+          alert('Error al eliminar el curso');
+        }
+      });
+    } else {
+      alert('Error: Este curso no existe.');
+    }
+  }
+
   getStudentsForCourse(course: Course): number[] {
     if (course.cursoUsuarios) {
       return course.cursoUsuarios.map(cu => cu.usuarioId);
