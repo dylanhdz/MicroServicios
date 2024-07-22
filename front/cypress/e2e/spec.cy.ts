@@ -1,12 +1,15 @@
 describe('Student and Course Management', () => {
   beforeEach(() => {
     cy.visit('/');
+    cy.get('input[name="nombreUsuario"]').clear();
+    cy.get('input[name="email"]').clear();
+    cy.get('input[name="password"]').clear();
   });
 
   it('agregar estudiante', () => {
-    cy.get('input[name="nombreUsuario"]').type('Martin Perez');
-    cy.get('input[name="email"]').type('mperez@example.com');
-    cy.get('input[name="password"]').type('password123');
+    cy.get('input[name="nombreUsuario"]').type('Juan Reyes S.');
+    cy.get('input[name="email"]').type('jfreyes4@espe.edu.ec');
+    cy.get('input[name="password"]').type('root');
     cy.get('button').contains('Agregar Estudiante').click();
   });
 
@@ -14,14 +17,14 @@ describe('Student and Course Management', () => {
 
   it('matricular estudiante en un curso', () => {
     cy.visit('/');
-    cy.contains('li', 'Martin Perez').within(() => {
-      cy.get('select').select('1 - Matematica');
+    cy.contains('li', 'Juan Reyes S.').within(() => {
+      cy.get('select').select('2 - Aplicaciones Distribuidas');
     });
   });
 
   it('eliminar estudiante', () => {
     cy.visit('/');
-    cy.contains('li', 'Martin Perez').within(() => {
+    cy.contains('li', 'Juan Reyes S.').within(() => {
       cy.get('button').contains('Eliminar').click();
     });
   });
@@ -43,7 +46,7 @@ describe('Student and Course Management', () => {
   it('matricular estudiante en un curso2', () => {
     cy.visit('/');
     cy.contains('li', 'Juan kings').within(() => {
-      cy.get('select').select('8 - Ingles');
+      cy.get('select').select('2 - Aplicaciones Distribuidas');
     });
   });
 
