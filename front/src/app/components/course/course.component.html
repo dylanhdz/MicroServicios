@@ -15,7 +15,7 @@
                   <label>Estudiantes Matriculados:</label>
                   <ul>
                     @for (studentId of getStudentsForCourse(course); track studentId) {
-                        <li>{{ studentId }}: {{ getStudentNameFromId(studentId) }}</li>
+                        <li>ID del Estudiante: {{ studentId }}</li>
                     }
                   </ul>
                 </div>
