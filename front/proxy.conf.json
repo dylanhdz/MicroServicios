@@ -1,0 +1,12 @@
+{
+    "/api/cursos": {
+      "target": "http://localhost:8002",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/api/usuarios": {
+      "target": "http://localhost:8001",
+      "secure": false,
+      "changeOrigin": true
+    }
+  }

@@ -1,0 +1,30 @@
+<div class="container">
+    <h1>Estudiantes</h1>
+    <h2>Agregar Estudiante</h2>
+    <form>
+      <label>Nombre: </label>
+      <input type="text" [(ngModel)]="nombreUsuario" name="nombreUsuario">
+      <label>Email: </label>
+      <input type="text" [(ngModel)]="email" name="email">
+      <label>Password: </label>
+      <input type="password" [(ngModel)]="password" name="password">
+      <button (click)="addStudent()">Agregar Estudiante</button>
+    </form>
+    <h2>Matrículas</h2>
+    <ul class="student-list">
+      @for (student of students; track student.id) {
+        <li>{{ student.nombre }} - {{ student.email }}
+        <div>
+            <label>Matricularse en un Curso: </label>
+            <select (change)="enrollStudentInCourse(student, $event)">
+                @for (course of courses; track course.id) {
+                    <option>
+                        {{course.id + ' - ' + course.nombre}}
+                    </option>
+                }
+            </select>
+          </div>
+        </li>
+      }
+    </ul>
+  </div>

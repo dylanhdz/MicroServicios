@@ -60,7 +60,12 @@ public class CursoServiceImpl implements CursoService {
 
             curso.addCursoUsuario(cursoUsuario);
             repository.save(curso);
-            }
+
+            // Return the usuario that was added
+            return Optional.of(usuarioMicro);
+        }
+
+        // If the course does not exist, return Optional.empty()
         return Optional.empty();
     }
 

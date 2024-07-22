@@ -1,0 +1,25 @@
+<div class="container">
+    <h1>Cursos</h1>
+    <h2>Agregar Curso</h2>
+    <form>
+      <label>Nombre: </label>
+      <input type="text" [(ngModel)]="nombre" name="nombre">
+      <button (click)="addCourse()">Agregar Curso</button>
+    </form>
+    <h1>Lista de Matrículas</h1>
+    <ul class="course-list">
+      @for (course of courses; track course.id) {
+        <li>
+            <h3>Curso: {{course.nombre}}</h3>
+                <div>
+                  <label>Estudiantes Matriculados:</label>
+                  <ul>
+                    @for (studentId of getStudentsForCourse(course); track studentId) {
+                        <li>ID del Estudiante: {{ studentId }}</li>
+                    }
+                  </ul>
+                </div>
+        </li>
+      }
+    </ul>
+  </div>

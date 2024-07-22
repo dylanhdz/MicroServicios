@@ -1,0 +1,15 @@
+<div class="container">
+  <h1>Gestor de Estudiantes y Cursos</h1>
+  <img src="https://static-cse.canva.com/blob/1392068/Canvastudentsbanner.png"
+  alt="CRUD" />
+  <nav>
+    <button (click)="showStudents()">Ver Estudiantes</button>
+    <button (click)="showCourses()">Ver Cursos</button>
+  </nav>
+  @if (view === 'students') {
+    <app-student></app-student>
+  }
+  @if (view === 'courses'){
+    <app-course></app-course>
+  }
+</div>
