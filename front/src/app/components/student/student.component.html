@@ -8,22 +8,35 @@
       <input type="text" [(ngModel)]="email" name="email">
       <label>Password: </label>
       <input type="password" [(ngModel)]="password" name="password">
+
       <button (click)="addStudent()">Agregar Estudiante</button>
+      <h2>Editar Estudiante</h2>
+      <label>Seleccionar Estudiante para Editar: </label>
+      <select [(ngModel)]="selectedStudentId" (ngModelChange)="loadSelectedStudent()" name="opcion">
+        @for (student of students; track student.id) {
+          <option [value]="student.id">{{ student.id + ' - ' + student.nombre }}</option>
+        }
+      </select>
+      <button (click)="updateStudent()">Editar Estudiante</button>
+      
     </form>
     <h2>Matrículas</h2>
     <ul class="student-list">
       @for (student of students; track student.id) {
-        <li>{{ student.nombre }} - {{ student.email }}
-        <div>
-            <label>Matricularse en un Curso: </label>
-            <select (change)="enrollStudentInCourse(student, $event)">
-                @for (course of courses; track course.id) {
-                    <option>
-                        {{course.id + ' - ' + course.nombre}}
-                    </option>
-                }
+        <li><h2>{{ student.nombre }}</h2>
+          <h3>{{ student.email }}</h3>
+          <div>
+            <label>Matricularse en: </label>
+            <select #courseSelect (change)="updateSelectedCourse(courseSelect.value)">
+              @for (course of courses; track course.id) {
+                <option value="{{course.id + ' - ' + course.nombre}}">
+                  {{course.id + ' - ' + course.nombre}}
+                </option>
+              }
             </select>
+            <button (click)="enrollStudentInCourse(student)">Matricularse</button>
           </div>
+          <button class="eliminar" (click)="deleteStudent(student)">Eliminar Estudiante</button>
         </li>
       }
     </ul>
