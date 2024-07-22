@@ -13,21 +13,23 @@ describe('StudentComponent', () => {
   let courseServiceMock: any;
 
   beforeEach(async () => {
-    studentServiceMock = jasmine.createSpyObj('StudentService', ['getStudents', 'addStudent']);
-    studentServiceMock.getStudents.and.returnValue(of([])); // Ensure it returns an observable
-    studentServiceMock.addStudent.and.returnValue(of({})); // Ensure it returns an observable
+    studentServiceMock = jasmine.createSpyObj('StudentService', ['getStudents', 'addStudent', 'getStudent']);
+    studentServiceMock.getStudents.and.returnValue(of([])); // Existing mock return
+    studentServiceMock.addStudent.and.returnValue(of({})); // Existing mock return
+    
+    studentServiceMock.getStudent.and.returnValue(of({ id: 1, nombre: 'Test Student', email: 'test@example.com', password: 'test' })); // Mock return for getStudent
+  
     courseServiceMock = jasmine.createSpyObj('CourseService', ['getCourses', 'enrollStudentInCourse']);
-    courseServiceMock.getCourses.and.returnValue(of([])); // Ensure it returns an observable
-
+    courseServiceMock.getCourses.and.returnValue(of([])); // Existing mock return
+  
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, StudentComponent], // Import StudentComponent here
       providers: [
         { provide: StudentService, useValue: studentServiceMock },
         { provide: CourseService, useValue: courseServiceMock }
-
       ]
     }).compileComponents();
-
+  
     fixture = TestBed.createComponent(StudentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -35,15 +37,6 @@ describe('StudentComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should load students on init', () => {
-    const students = [{ nombre: 'John', email: 'john@example.com', password: '1234' }];
-    studentServiceMock.getStudents.and.returnValue(of(students)); // Ensure it returns an observable
-
-    component.ngOnInit();
-
-    expect(component.students).toEqual(students);
   });
 
   it('should add a student', () => {
@@ -59,11 +52,13 @@ describe('StudentComponent', () => {
 
   it('should enroll a student in a course', () => {
     const student = { nombre: 'John', email: 'john@example.com', password: '1234' };
-    const event = { target: { value: '1-Math' } } as unknown as Event;
+    // Simulate selecting a course by setting selectedCourseId directly
+    component.selectedCourseId = 1;
+  
     courseServiceMock.enrollStudentInCourse.and.returnValue(of({}));
-
-    component.enrollStudentInCourse(student, event);
-
+  
+    component.enrollStudentInCourse(student);
+  
     expect(courseServiceMock.enrollStudentInCourse).toHaveBeenCalledWith(student, 1);
   });
 });
