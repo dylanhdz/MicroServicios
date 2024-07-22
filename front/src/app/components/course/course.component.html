@@ -10,12 +10,14 @@
     <ul class="course-list">
       @for (course of courses; track course.id) {
         <li>
-            <h3>Curso: {{course.nombre}}</h3>
+              <h2>{{course.nombre}}</h2>
                 <div>
                   <label>Estudiantes Matriculados:</label>
                   <ul>
                     @for (studentId of getStudentsForCourse(course); track studentId) {
-                        <li>{{ studentId }}: {{ getStudentNameFromId(studentId) }}</li>
+                        @if(getStudentNameFromId(studentId) != '') {
+                            <li>{{ studentId }}: {{ getStudentNameFromId(studentId) }}</li>
+                        }
                     }
                   </ul>
                 </div>
