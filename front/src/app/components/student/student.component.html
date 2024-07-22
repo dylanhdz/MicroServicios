@@ -14,6 +14,8 @@
     <ul class="student-list">
       @for (student of students; track student.id) {
         <li>{{ student.nombre }} - {{ student.email }}
+          <button (click)="deleteStudent(student)">Eliminar</button>
+
         <div>
             <label>Matricularse en un Curso: </label>
             <select (change)="enrollStudentInCourse(student, $event)">
