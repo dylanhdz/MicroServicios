@@ -71,4 +71,26 @@ export class StudentComponent implements OnInit{
       }
     });
   }
+
+  deleteStudent(student: Student): void {
+    if (student.id !== undefined) {
+      this.studentService.deleteStudent(student.id).subscribe({
+        next: (response) => {
+          // Handle successful deletion
+          alert('Se ha eliminado el estudiante ' + student.nombre);
+          this.loadStudents();
+        },
+        error: (error) => {
+          // Handle error
+          alert('Error al eliminar el estudiante');
+        }
+      });
+    } else {
+      // Handle case where student.id is undefined
+      alert('Error: student.id is undefined');
+    }
+  }
+  trackByStudentId(index: number, student: Student): number | undefined {
+    return student.id;
+  }
 }
