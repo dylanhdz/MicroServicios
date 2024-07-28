@@ -20,14 +20,19 @@ export class StudentService {
   }
 
   addStudent(student: Student): Observable<Student> {
-    return this.http.post<Student>(`${this.apiUrl}/crear`, student);
+    return this.http.post<Student>(`${this.apiUrl}/crear`, this.sanitizeStudent(student));
   }
 
   updateStudent(student: Student): Observable<Student> {
-    return this.http.put<Student>(`${this.apiUrl}/actualizar/${student.id}`, student);
+    return this.http.put<Student>(`${this.apiUrl}/actualizar/${student.id}`, this.sanitizeStudent(student));
   }
 
   deleteStudent(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/eliminar/${id}`);
+  }
+
+  private sanitizeStudent(student: Student): Student {
+    // Implement sanitization logic here
+    return student;
   }
 }

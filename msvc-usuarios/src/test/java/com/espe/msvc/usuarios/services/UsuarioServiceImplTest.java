@@ -51,8 +51,6 @@ public class UsuarioServiceImplTest {
         verify(usuarioRepository).findAll();
     }
 
-    
-
     @Test
     public void porIdTest() {
         Long id = 1L;
@@ -78,6 +76,7 @@ public class UsuarioServiceImplTest {
         assertEquals("Test User", savedUsuario.getNombre());
         verify(usuarioRepository).save(any(Usuario.class));
     }
+
     @Test
     public void guardarTestConExcepcion() {
         Usuario usuarioConError = new Usuario();
@@ -98,6 +97,7 @@ public class UsuarioServiceImplTest {
         usuarioService.eliminar(id);
         verify(usuarioRepository).deleteById(id);
     }
+
     @Test
     public void eliminarUsuarioInexistenteTest() {
         Long idInexistente = 999L;

@@ -1,11 +1,11 @@
 <div class="container">
     <h1>Cursos</h1>
     <h2>Agregar Curso</h2>
-    <form>
-      <label>Nombre: </label>
-      <input type="text" [(ngModel)]="nombre" name="nombre">
-      <button (click)="addCourse()">Agregar Curso</button>
-    </form>
+  <form>
+    <label>Nombre: </label>
+    <input type="text" [(ngModel)]="nombre" name="nombre" required pattern="[a-zA-Z ]*">
+    <button (click)="addCourse()" [disabled]="!nombre">Agregar Curso</button>
+  </form>
     <h1>Lista de Matrículas</h1>
     <ul class="course-list">
       @for (course of courses; track course.id) {
@@ -23,7 +23,7 @@
                   <button class="eliminar" (click)="deleteCourse(course)">Eliminar Curso</button>
                 </div>
         </li>
-        
+
       }
     </ul>
   </div>

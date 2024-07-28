@@ -3,13 +3,13 @@
     <h2>Agregar Estudiante</h2>
     <form>
       <label>Nombre: </label>
-      <input type="text" [(ngModel)]="nombreUsuario" name="nombreUsuario">
+      <input type="text" [(ngModel)]="nombreUsuario" name="nombreUsuario" required pattern="[a-zA-Z ]*">
       <label>Email: </label>
-      <input type="text" [(ngModel)]="email" name="email">
+      <input type="email" [(ngModel)]="email" name="email" required>
       <label>Password: </label>
-      <input type="password" [(ngModel)]="password" name="password">
+      <input type="password" [(ngModel)]="password" name="password" required minlength="8">
+      <button (click)="addStudent()" [disabled]="!nombreUsuario || !email || !password">Agregar Estudiante</button>
 
-      <button (click)="addStudent()">Agregar Estudiante</button>
       <h2>Editar Estudiante</h2>
       <label>Seleccionar Estudiante para Editar: </label>
       <select [(ngModel)]="selectedStudentId" (ngModelChange)="loadSelectedStudent()" name="opcion">
@@ -18,7 +18,7 @@
         }
       </select>
       <button (click)="updateStudent()">Editar Estudiante</button>
-      
+
     </form>
     <h2>Matrículas</h2>
     <ul class="student-list">

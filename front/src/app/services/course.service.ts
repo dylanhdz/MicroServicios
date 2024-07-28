@@ -21,11 +21,11 @@ export class CourseService {
   }
 
   addCourse(course: Course): Observable<Course> {
-    return this.http.post<Course>(`${this.apiUrl}/crear`, course);
+    return this.http.post<Course>(`${this.apiUrl}/crear`, this.sanitizeCourse(course));
   }
 
   updateCourse(course: Course): Observable<Course> {
-    return this.http.put<Course>(`${this.apiUrl}/actualizar/${course.id}`, course);
+    return this.http.put<Course>(`${this.apiUrl}/actualizar/${course.id}`, this.sanitizeCourse(course));
   }
 
   deleteCourse(id: number): Observable<void> {
@@ -33,6 +33,16 @@ export class CourseService {
   }
 
   enrollStudentInCourse(student: Student, idCurso: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/asignar-usuario/${idCurso}`, student);
+    return this.http.put<any>(`${this.apiUrl}/asignar-usuario/${idCurso}`, this.sanitizeStudent(student));
+  }
+
+  private sanitizeCourse(course: Course): Course {
+    // Implement sanitization logic here
+    return course;
+  }
+
+  private sanitizeStudent(student: Student): Student {
+    // Implement sanitization logic here
+    return student;
   }
 }
