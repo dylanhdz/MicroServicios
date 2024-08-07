@@ -1,0 +1,10 @@
+# Dockerfile for app
+FROM maven AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean install
+
+FROM openjdk
+WORKDIR /app
+COPY --from=build /app/msvc-usuarios/target/msvc-usuarios-0.0.1-SNAPSHOT.jar msvc-usuarios.jar
+COPY --from=build /app/msvc-cursos/target/msvc-cursos-0.0.1-SNAPSHOT.jar msvc-cursos.jar
