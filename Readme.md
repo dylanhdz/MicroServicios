@@ -13,6 +13,10 @@ Se realizaron pruebas estáticas con SonarQube, obteniendo los siguientes result
 - Bugs: 0
 - Vulnerabilities: 0
 - Code Smells: 0
+Se realizó un análisis usando OWASP ZAP y se obtuvieron los siguientes resultados:
+- Error: "The following resources are missing a Content-Security-Policy header"
+- Solución: Se debe agregar la cabecera `Content-Security-Policy` en el archivo `index.html` de Angular.
+
 ## Resultados de las Pruebas Dinámicas
 Se realizaron pruebas dinámicas con Karma y Jasmine, obteniendo los siguientes resultados:
 - Test Suites: 3
