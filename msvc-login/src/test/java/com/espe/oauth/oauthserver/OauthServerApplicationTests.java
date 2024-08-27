@@ -1,4 +1,4 @@
-package com.irojas.oauth.oauthserver;
+package com.espe.oauth.oauthserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
