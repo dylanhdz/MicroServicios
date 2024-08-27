@@ -1,11 +1,11 @@
 {
     "/api/cursos": {
-      "target": "http://localhost:8002",
+      "target": "http://msvc-cursos:8002",
       "secure": false,
       "changeOrigin": true
     },
     "/api/usuarios": {
-      "target": "http://localhost:8001",
+      "target": "http://msvc-usuarios:8001",
       "secure": false,
       "changeOrigin": true
     }

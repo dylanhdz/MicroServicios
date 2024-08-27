@@ -14,7 +14,6 @@ services:
       - mysql
     networks:
       - host
-
   msvc-cursos:
     build:
       context: ./msvc-cursos
@@ -30,7 +29,21 @@ services:
       - postgres
     networks:
       - host
-
+  msvc-login:
+    build:
+      context: ./msvc-login
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    environment:
+      - SPRING_APPLICATION_NAME=oauth-server
+      - SERVER_PORT=9000
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY=TRACE
+    depends_on:
+      - mysql
+      - postgres
+    networks:
+      - host
   mysql:
     image: mysql:8.0
     environment:
@@ -42,7 +55,6 @@ services:
       - mysql-data:/var/lib/mysql
     networks:
       - host
-
   postgres:
     image: postgres:15
     environment:
@@ -55,7 +67,6 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - host
-
   pgadmin:
     image: dpage/pgadmin4
     environment:
@@ -76,13 +87,9 @@ services:
       - msvc-cursos
     networks:
       - host
-
 networks:
   host:
     driver: bridge
-
 volumes:
   mysql-data:
   postgres-data:
-
-  
