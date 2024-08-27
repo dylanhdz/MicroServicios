@@ -73,7 +73,7 @@ public class SecurityConfig {
 				)
 				.csrf(csrf -> csrf.disable())
 				.formLogin(form -> form
-						.defaultSuccessUrl("http://localhost:4200", true) // Redirigir después del login
+						.defaultSuccessUrl("http://172.212.90.203:4200", true) // Redirigir después del login
 				);
 
 		return http.build();
