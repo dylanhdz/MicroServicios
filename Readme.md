@@ -7,6 +7,30 @@ Sistema de matriculación de estudiantes en cursos, desarrollado con Angular, Sp
 - Maven
 - Node.js
 - Angular CLI
+
+# Modo de Instalación
+## Local
+## Clonar el Repositorio
+```bash
+git clone
+```
+## Iniciar los microservicios
+```bash
+cd msvc-usuarios
+mvn spring-boot:run 
+cd ..
+cd msvc-cursos
+mvn spring-boot:run
+cd ..
+cd front
+ng serve
+```
+
+## Dockerizar
+```bash
+docker-compose up
+```
+
 # Sobre las Pruebas
 ## Resultados de las Pruebas Estáticas
 Se realizaron pruebas estáticas con SonarQube, obteniendo los siguientes resultados:
