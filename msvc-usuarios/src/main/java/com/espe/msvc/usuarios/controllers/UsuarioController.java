@@ -36,6 +36,15 @@ public class UsuarioController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/nombre/{nombre}")
+    public ResponseEntity<?> porNombre(@PathVariable String nombre){
+        Optional<Usuario> usuariosOptional = service.porNombre(nombre);
+        if(usuariosOptional.isPresent()) {
+            return ResponseEntity.ok().body(usuariosOptional.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PostMapping("/crear")
     public ResponseEntity<?> crear(@Valid @RequestBody Usuario usuario, BindingResult result){
         if(result.hasErrors()){

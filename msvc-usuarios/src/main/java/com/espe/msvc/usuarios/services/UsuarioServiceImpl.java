@@ -25,6 +25,12 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Optional<Usuario> porNombre(String nombre) {
+        return repository.findByNombre(nombre);
+    }
+
+    @Override
     @Transactional
     public Usuario guardar(Usuario usuario) {
         return repository.save(usuario);

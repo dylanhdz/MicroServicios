@@ -12,16 +12,16 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -32,17 +32,31 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+	private final CustomUserDetailsService customUserDetailsService;
+	private final CustomAuthenticationProvider customAuthenticationProvider;
+
+	@Autowired
+	public SecurityConfig(@Lazy CustomUserDetailsService customUserDetailsService, @Lazy CustomAuthenticationProvider customAuthenticationProvider) {
+		this.customUserDetailsService = customUserDetailsService;
+		this.customAuthenticationProvider = customAuthenticationProvider;
+	}
+
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
 
 	@Bean
 	public CorsFilter corsFilter() {
@@ -56,25 +70,22 @@ public class SecurityConfig {
 		return new CorsFilter(source);
 	}
 
-	@Bean 
+	@Bean
 	@Order(1)
 	public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
 			throws Exception {
 		OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 		http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-			.oidc(Customizer.withDefaults());	// Enable OpenID Connect 1.0
+				.oidc(Customizer.withDefaults());    // Enable OpenID Connect 1.0
 		http
-			// Redirect to the login page when not authenticated from the
-			// authorization endpoint
-			.exceptionHandling((exceptions) -> exceptions
-				.defaultAuthenticationEntryPointFor(
-					new LoginUrlAuthenticationEntryPoint("/login"),
-					new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+				.exceptionHandling((exceptions) -> exceptions
+						.defaultAuthenticationEntryPointFor(
+								new LoginUrlAuthenticationEntryPoint("/login"),
+								new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+						)
 				)
-			)
-			// Accept access tokens for User Info and/or Client Registration
-			.oauth2ResourceServer((resourceServer) -> resourceServer
-				.jwt(Customizer.withDefaults()));
+				.oauth2ResourceServer((resourceServer) -> resourceServer
+						.jwt(Customizer.withDefaults()));
 
 		return http.build();
 	}
@@ -88,24 +99,13 @@ public class SecurityConfig {
 				)
 				.csrf(csrf -> csrf.disable())
 				.formLogin(form -> form
-						.defaultSuccessUrl("http://msvc-login:4200", true) // Redirigir después del login
+						.defaultSuccessUrl("http://localhost:4200", true)
 				);
 
 		return http.build();
 	}
 
-	@Bean 
-	public UserDetailsService userDetailsService() {
-		UserDetails userDetails = User.builder()
-				.username("dario")
-				.password("{noop}dario123")
-				.roles("USER")
-				.build();
-
-		return new InMemoryUserDetailsManager(userDetails);
-	}
-
-	@Bean 
+	@Bean
 	public RegisteredClientRepository registeredClientRepository() {
 		RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
 				.clientId("oidc-client")
@@ -120,7 +120,7 @@ public class SecurityConfig {
 				.scope("write")
 				.build();
 
-			RegisteredClient oauthClient = RegisteredClient.withId(UUID.randomUUID().toString())
+		RegisteredClient oauthClient = RegisteredClient.withId(UUID.randomUUID().toString())
 				.clientId("oauth-client")
 				.clientSecret("{noop}12345678910")
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
@@ -135,10 +135,10 @@ public class SecurityConfig {
 				.scope("write")
 				.build();
 
-		return new InMemoryRegisteredClientRepository(oidcClient,oauthClient);
+		return new InMemoryRegisteredClientRepository(oidcClient, oauthClient);
 	}
 
-	@Bean 
+	@Bean
 	public JWKSource<SecurityContext> jwkSource() {
 		KeyPair keyPair = generateRsaKey();
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
@@ -151,27 +151,15 @@ public class SecurityConfig {
 		return new ImmutableJWKSet<>(jwkSet);
 	}
 
-	private static KeyPair generateRsaKey() { 
+	private static KeyPair generateRsaKey() {
 		KeyPair keyPair;
 		try {
 			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
 			keyPairGenerator.initialize(2048);
 			keyPair = keyPairGenerator.generateKeyPair();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new IllegalStateException(ex);
 		}
 		return keyPair;
 	}
-
-	@Bean 
-	public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
-		return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
-	}
-
-	@Bean 
-	public AuthorizationServerSettings authorizationServerSettings() {
-		return AuthorizationServerSettings.builder().build();
-	}
-
 }
